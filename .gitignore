@@ -1,0 +1,10 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+credentials.json
+secrets/
+
+# Local tooling
+.DS_Store
+node_modules/
