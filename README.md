@@ -30,6 +30,8 @@ WHERE EXTRACT(YEAR FROM date) = 2020;
 
 ![Conversational result](screenshots/total-sales-chat.png)
 
+![Database validation](screenshots/total-sales-validation.png)
+
 ### Top 3 customers in India in 2020
 
 **Question:** Who were the top 3 customers in India based on sales quantity in 2020?
@@ -51,6 +53,10 @@ LIMIT 3;
 | Atliq Exclusive | 812,658 |
 | Flipkart | 692,938 |
 
+![Conversational result](screenshots/top-customers-india-chat.png)
+
+![Database validation](screenshots/top-customers-india-validation.png)
+
 ### Sales comparison: 2019 vs 2020
 
 **Question:** Compare sales between 2019 and 2020.
@@ -68,6 +74,10 @@ ORDER BY year;
 | --- | ---: |
 | 2019 | 16,452,462 |
 | 2020 | 31,684,973 |
+
+![Conversational result](screenshots/sales-comparison-chat.png)
+
+![Database validation](screenshots/sales-comparison-validation.png)
 
 Each result above was validated against the PostgreSQL database.
 

@@ -5,7 +5,12 @@ ai-sql-analytics-assistant/
 │   └── ai-sql-analytics-workflow.json
 ├── screenshots/
 │   ├── workflow-overview.png
-│   └── total-sales-chat.png
+│   ├── total-sales-chat.png
+│   ├── total-sales-validation.png
+│   ├── top-customers-india-chat.png
+│   ├── top-customers-india-validation.png
+│   ├── sales-comparison-chat.png
+│   └── sales-comparison-validation.png
 └── LICENSE
 
 Before publishing the workflow export, remove or replace any embedded
