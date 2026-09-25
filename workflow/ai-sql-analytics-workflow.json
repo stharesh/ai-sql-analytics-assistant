@@ -1,0 +1,128 @@
+{
+  "name": "AI SQL Analytics Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nI am your SQL buddy! What insights do you need?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [-688, -176],
+      "id": "b7248912-ddf9-461d-a14e-9b424ba5001b",
+      "name": "When chat message received"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "**Role & Objective**\nYou are an expert PostgreSQL data assistant. Answer user questions by querying the database with the provided tools and returning clear, human-readable results.\n\n**Core Directives**\n\n1. **Strict schema compliance**\n- Never invent table or column names.\n- Use only the schema returned by the database tool.\n- Derive dates with standard PostgreSQL functions when needed.\n\n2. **Tool execution protocol**\n- Generate the required SQL internally and execute it with the Query executor tool.\n- Wait for the database result before answering.\n- Do not show raw SQL unless the user asks for it.\n\n3. **Final response formatting**\n- Present results clearly using short prose, lists, or Markdown tables.\n\n4. **Missing data**\n- If the request cannot be mapped to the available schema, explain that the data is unavailable and suggest two or three metrics that can be answered."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [-480, -176],
+      "id": "ab4fb775-2dac-4118-8511-75900efdb611",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [-608, 0],
+      "id": "bac3bca5-8d0f-4271-9362-91feb2b7d35c",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [-432, 64],
+      "id": "4b24fb66-665d-454d-9366-74d5fc6c496f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Fetch the available PostgreSQL schema.",
+        "operation": "executeQuery",
+        "query": "SELECT\n    table_schema,\n    table_name,\n    column_name,\n    data_type,\n    character_maximum_length,\n    is_nullable,\n    column_default\nFROM information_schema.columns\nWHERE table_schema = 'public'\nORDER BY table_schema, table_name, ordinal_position;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.7,
+      "position": [-256, 48],
+      "id": "1a9350fe-1526-4bdd-b48a-528cbdaa5838",
+      "name": "Read PostgreSQL schema"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to execute PostgreSQL queries against the database. Provide a valid SQL string.",
+        "workflowId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "Query executor"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "sql_query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('sql_query', `The exact PostgreSQL query string to execute.`, 'string') }}"
+          },
+          "matchingColumns": ["sql_query"],
+          "schema": [
+            {
+              "id": "sql_query",
+              "displayName": "sql_query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [-96, 16],
+      "id": "c9b60f27-1653-49fd-93ef-2b3476c80deb",
+      "name": "Call 'Query executor'"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [[{"node": "AI Agent", "type": "main", "index": 0}]]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [[{"node": "AI Agent", "type": "ai_languageModel", "index": 0}]]
+    },
+    "Simple Memory": {
+      "ai_memory": [[{"node": "AI Agent", "type": "ai_memory", "index": 0}]]
+    },
+    "Read PostgreSQL schema": {
+      "ai_tool": [[{"node": "AI Agent", "type": "ai_tool", "index": 0}]]
+    },
+    "AI Agent": {
+      "main": [[]]
+    },
+    "Call 'Query executor'": {
+      "ai_tool": [[{"node": "AI Agent", "type": "ai_tool", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "tags": []
+}

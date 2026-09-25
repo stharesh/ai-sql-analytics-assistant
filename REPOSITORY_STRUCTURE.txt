@@ -2,7 +2,8 @@ ai-sql-analytics-assistant/
 ├── README.md
 ├── .gitignore
 ├── workflow/
-│   └── ai-sql-analytics-workflow.json
+│   ├── ai-sql-analytics-workflow.json
+│   └── query-executor.json
 ├── screenshots/
 │   ├── workflow-overview.png
 │   ├── total-sales-chat.png
