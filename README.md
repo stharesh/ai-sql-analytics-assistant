@@ -14,6 +14,28 @@ User question → AI Agent + Gemini → SQL query → PostgreSQL / Supabase → 
 
 ![Workflow overview](screenshots/workflow-overview.png)
 
+### Why use a separate Query executor workflow?
+
+The main workflow manages the conversation, reads the available database schema, and uses Gemini to generate the required SQL. Generating SQL alone does not produce the answer—the query must still be executed against PostgreSQL.
+
+In this design, the generated SQL cannot be passed directly through the main workflow's fixed schema-reading query. The separate **Query executor** workflow provides a clear execution step:
+
+```text
+Generated SQL
+      ↓
+sql_query input parameter
+      ↓
+Query executor workflow
+      ↓
+PostgreSQL executes the query
+      ↓
+Database rows return to the AI Agent
+      ↓
+Conversational answer
+```
+
+Keeping execution in a sub-workflow gives the AI Agent a reusable tool with one defined input—`sql_query`—while keeping database execution and credentials in a dedicated workflow.
+
 ## Validated examples
 
 ### Total sales quantity in 2020
