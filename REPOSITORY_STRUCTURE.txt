@@ -1,0 +1,12 @@
+ai-sql-analytics-assistant/
+├── README.md
+├── .gitignore
+├── workflow/
+│   └── ai-sql-analytics-workflow.json
+├── screenshots/
+│   ├── workflow-overview.png
+│   └── total-sales-chat.png
+└── LICENSE
+
+Before publishing the workflow export, remove or replace any embedded
+credentials, connection strings, API keys, and private identifiers.
